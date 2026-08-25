@@ -1,0 +1,15 @@
+{
+	# FrankenPHP global options
+	frankenphp
+	auto_https off
+}
+
+:80 {
+	# Serve the Laravel public directory
+	root * /app/public
+	encode zstd br gzip
+
+	route {
+		php_server
+	}
+}

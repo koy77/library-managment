@@ -1,0 +1,70 @@
+/* Адаптивные карточки: на малых экранах строки таблиц .table-cards превращаются в карточки */
+@media (max-width: 767.98px) {
+    .table-cards thead { display: none; }
+
+    .table-cards,
+    .table-cards tbody,
+    .table-cards tr,
+    .table-cards td { display: block; width: 100%; }
+
+    .table-cards tbody tr {
+        border: 1px solid #dee2e6;
+        border-radius: .5rem;
+        padding: .5rem;
+        margin-bottom: .75rem;
+        background: #fff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+    }
+
+    .table-cards tbody tr td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: .5rem;
+        border: none;
+        border-bottom: 1px dashed #e9ecef;
+        padding: .4rem .25rem;
+    }
+
+    .table-cards tbody tr td:last-child { border-bottom: none; }
+
+    /* Подпись слева (из data-label) */
+    .table-cards tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #6c757d;
+        flex-shrink: 0;
+    }
+
+    /* Ячейки без подписи (например, раскрываемый блок книг автора) */
+    .table-cards tbody td[data-label=""]::before { content: none; }
+
+    /* Счётчики "Всего / Доступно" — группа держится вместе справа */
+    .table-cards tbody td .copies {
+        margin-left: auto;
+        white-space: nowrap;
+    }
+
+    /* Кнопки действий — компактно, прижаты вправо */
+    .table-cards tbody tr td[data-label="Действия"] {
+        display: flex;
+        gap: .5rem;
+        justify-content: flex-end;
+    }
+
+    .table-cards tbody tr td[data-label="Действия"]::before { content: none; }
+
+    .table-cards tbody tr td[data-label="Действия"] a,
+    .table-cards tbody tr td[data-label="Действия"] form { flex: 0 0 auto; }
+
+    .table-cards tbody tr td[data-label="Действия"] .btn { width: auto; }
+}
+
+/* (md, 768–991px): кнопки действий ниже по высоте */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .table-cards tbody tr td[data-label="Действия"] .btn {
+        padding: .125rem .5rem;
+        font-size: .8rem;
+        line-height: 1.2;
+    }
+}

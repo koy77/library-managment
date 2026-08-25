@@ -1,0 +1,75 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: library_app
+    restart: unless-stopped
+    ports:
+      - "8083:80"
+    environment:
+      SERVER_NAME: "http://localhost:8083"
+      APP_ENV: local
+      APP_DEBUG: "true"
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: library
+      DB_USERNAME: laravel
+      DB_PASSWORD: secretpassword
+      SESSION_DRIVER: database
+      CACHE_DRIVER: file
+      QUEUE_CONNECTION: database
+    volumes:
+      - .:/app
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - db
+    networks:
+      - library_network
+
+  db:
+    image: postgres:16-alpine
+    container_name: library_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: library
+      POSTGRES_USER: laravel
+      POSTGRES_PASSWORD: secretpassword
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    networks:
+      - library_network
+
+  adminer:
+    image: adminer:latest
+    container_name: library_adminer
+    restart: unless-stopped
+    ports:
+      - "8084:8080"
+    depends_on:
+      - db
+    networks:
+      - library_network
+
+  vite:
+    image: node:20-alpine
+    container_name: library_vite
+    restart: unless-stopped
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+    command: sh -c "npm install && npm run dev"
+    networks:
+      - library_network
+
+volumes:
+  db_data:
+
+networks:
+  library_network:
+    driver: bridge

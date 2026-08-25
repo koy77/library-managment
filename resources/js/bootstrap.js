@@ -1,0 +1,1 @@
+// Vite entry point — клиентская логика подключается отдельно (jQuery/Bootstrap через CDN).
